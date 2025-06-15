@@ -65,8 +65,29 @@ class Scanner {
     case '{':
       System.out.println("LEFT_BRACE { null");
       break;
+    case '*':
+      System.out.println("STAR * null");
+      break;
+    case '+':
+      System.out.println("PLUS + null");
+      break;
+    case '.':
+      System.out.println("DOT . null");
+      break;
+    case ',':
+      System.out.println("COMMA , null");
+      break;
+    case '-':
+      System.out.println("MINUS - null");
+      break;
+    case '/':
+      System.out.println("SLASH / null");
+      break;
+    case ';':
+      System.out.println("SEMICOLON ; null");
+      break;
     default:
-      System.out.println("EOF  null");
+      System.out.println("Not added " + c);
     }
   }
 
