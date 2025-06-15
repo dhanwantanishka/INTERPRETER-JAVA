@@ -31,7 +31,7 @@ public class Main {
     // Uncomment this block to pass the first stage
     // 
     if (fileContents.length() > 0) {
-    //   throw new RuntimeException("Scanner not implemented");
+      throw new RuntimeException("Scanner not implemented");
     } else {
      System.out.println("EOF  null"); // Placeholder, replace this line when implementing the scanner
     // }
