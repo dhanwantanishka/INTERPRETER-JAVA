@@ -84,6 +84,9 @@ public class Scanner {
 
       System.out.println("LESS < null");
       break;
+    case '"':
+      string();
+      break;
     case ' ':
     case '\r':
     case '\t':
@@ -94,6 +97,27 @@ public class Scanner {
       hadError = true;
       break;
     }
+  }
+
+  private void string() {
+    int start = current - 1;
+    while (peek() != '"' && !isAtEnd()) {
+      if (peek() == '\n') line++;
+      advance();
+    }
+
+    if (isAtEnd()) {
+      System.err.printf("[line %d] Error: Unterminated string.\n", line);
+      hadError = true;
+      return;
+    }
+
+    // The closing ".
+    advance();
+
+    // Trim the surrounding quotes.
+    String value = file.substring(start + 1, current - 1);
+    System.out.println("STRING " + file.substring(start, current) + " " + value);
   }
 
   private char peek() {
