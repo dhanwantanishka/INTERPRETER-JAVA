@@ -3,6 +3,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class Main {
+
   public static void main(String[] args) {
     // You can use print statements as follows for debugging, they'll be visible
     // when running tests.
@@ -29,49 +30,112 @@ public class Main {
       System.exit(1);
     }
 
-    int fileLen = fileContents.length();
-    int exitCode = 0;
-    int lineNum = 1;
-    for (int i = 0; i < fileLen; i++) {
-      if (fileContents.charAt(i) == '(') {
-        System.out.println("LEFT_PAREN ( null");
-      } else if (fileContents.charAt(i) == ')') {
-        System.out.println("RIGHT_PAREN ) null");
-      } else if (fileContents.charAt(i) == '{') {
-        System.out.println("LEFT_BRACE { null");
-      } else if (fileContents.charAt(i) == '}') {
-        System.out.println("RIGHT_BRACE } null");
-      } else if (fileContents.charAt(i) == '.') {
-        System.out.println("DOT . null");
-      } else if (fileContents.charAt(i) == ',') {
-        System.out.println("COMMA , null");
-      } else if (fileContents.charAt(i) == '+') {
-        System.out.println("PLUS + null");
-      } else if (fileContents.charAt(i) == '*') {
-        System.out.println("STAR * null");
-      } else if (fileContents.charAt(i) == '/') {
-        System.out.println("SLASH / null");
-      } else if (fileContents.charAt(i) == '-') {
-        System.out.println("MINUS - null");
-      } else if (fileContents.charAt(i) == ';') {
-        System.out.println("SEMICOLON ; null");
-      } else if (fileContents.charAt(i) == '\n') {
-        lineNum++;
-      } else if (i < fileLen - 1 && fileContents.charAt(i) == '=' &&
-                 fileContents.charAt(i + 1) == '=') {
-        System.out.println("EQUAL_EQUAL == null");
-        i++;
-      } else if (fileContents.charAt(i) == '=') {
-        System.out.println("EQUAL = null");
-      } else {
-        System.err.println(
-            "[line " + lineNum +
-            "] Error: Unexpected character: " + fileContents.charAt(i));
-        exitCode = 65;
-      }
+    // Uncomment this block to pass the first stage
+    // Implement the scanner
+    if (fileContents.length() > 0) {
+      Scanner scanner = new Scanner(fileContents);
+      scanner.scanTokens();
+    } else {
+      System.out.println("EOF  null"); // Placeholder, replace this line when
+                                       // implementing the scanner
     }
-    System.out.println("EOF  null"); // Placeholder, remove this line when
-                                     // implementing the scanner
-    System.exit(exitCode);
+  }
+}
+
+class Scanner {
+  private int current = 0;
+  private String file;
+  private int line = 1;
+  static private boolean hadError = false;
+
+  Scanner(String fileContents) { this.file = fileContents; }
+
+  private char advance() { return file.charAt(current++); }
+
+  private void scanToken() {
+    char c = advance();
+    switch (c) {
+    case '(':
+      System.out.println("LEFT_PAREN ( null");
+      break;
+    case ')':
+      System.out.println("RIGHT_PAREN ) null");
+      break;
+    case '}':
+      System.out.println("RIGHT_BRACE } null");
+      break;
+    case '{':
+      System.out.println("LEFT_BRACE { null");
+      break;
+    case '*':
+      System.out.println("STAR * null");
+      break;
+    case '+':
+      System.out.println("PLUS + null");
+      break;
+    case '.':
+      System.out.println("DOT . null");
+      break;
+    case ',':
+      System.out.println("COMMA , null");
+      break;
+    case '-':
+      System.out.println("MINUS - null");
+      break;
+    case '/':
+      System.out.println("SLASH / null");
+      break;
+    case ';':
+      System.out.println("SEMICOLON ; null");
+      break;
+    case '\n':
+      line++;
+      break;
+    case '=':
+      if (match('=')) {
+        System.out.println("EQUAL_EQUAL == null");
+        break;
+      }
+
+      System.out.println("EQUAL = null");
+      break;
+    case '!':
+      if (match('=')) {
+        System.out.println("BANG_EQUAL != null");
+        break;
+      }
+
+      System.out.println("BANG ! null");
+      break;
+    default:
+      System.err.printf("[line %d] Error: Unexpected character: %c\n", line, c);
+      hadError = true;
+      break;
+    }
+  }
+
+  private boolean isAtEnd() { return current >= file.length(); }
+
+  private boolean match(char expected) {
+    if (isAtEnd())
+      return false;
+    if (file.charAt(current) != expected)
+      return false;
+
+    current++;
+    return true;
+  }
+
+  public void scanTokens() {
+    while (!isAtEnd()) {
+      scanToken();
+    }
+
+    if (hadError) {
+      System.out.println("EOF  null");
+      System.exit(65);
+    }
+
+    System.out.println("EOF  null");
   }
 }
