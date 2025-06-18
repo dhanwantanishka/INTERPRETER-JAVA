@@ -128,6 +128,11 @@ class Scanner {
 
       System.out.println("LESS < null");
       break;
+    case ' ':
+    case '\r':
+    case '\t':
+      // Ignore whitespace.
+      break;
     default:
       System.err.printf("[line %d] Error: Unexpected character: %c\n", line, c);
       hadError = true;
