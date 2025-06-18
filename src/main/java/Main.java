@@ -3,7 +3,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class Main {
-
   public static void main(String[] args) {
     // You can use print statements as follows for debugging, they'll be visible
     // when running tests.
@@ -31,73 +30,43 @@ public class Main {
     }
 
     // Uncomment this block to pass the first stage
-    // Implement the scanner
+    //
+    boolean hadError = false;
     if (fileContents.length() > 0) {
-      Scanner scanner = new Scanner(fileContents);
-      scanner.scanTokens();
+      for (char c : fileContents.toCharArray()) {
+        if (c == '(')
+          System.out.println("LEFT_PAREN ( null");
+        else if (c == ')')
+          System.out.println("RIGHT_PAREN ) null");
+        else if (c == '{')
+          System.out.println("LEFT_BRACE { null");
+        else if (c == '}')
+          System.out.println("RIGHT_BRACE } null");
+        else if (c == '*')
+          System.out.println("STAR * null");
+        else if (c == '.')
+          System.out.println("DOT . null");
+        else if (c == '-')
+          System.out.println("MINUS - null");
+        else if (c == ';')
+          System.out.println("SEMICOLON ; null");
+        else if (c == ',')
+          System.out.println("COMMA , null");
+        else if (c == '+')
+          System.out.println("PLUS + null");
+        else {
+          System.err.println("[line 1] Error: Unexpected character: " + c);
+          hadError = true;
+        }
+      }
+      System.out.println("EOF  null");
     } else {
-      System.out.println("EOF  null"); // Placeholder, replace this line when
-                                       // implementing the scanner
+      System.out.println("EOF  null");
     }
-  }
-}
-
-class Scanner {
-  private int current = 0;
-  private String file;
-
-  Scanner(String fileContents) { this.file = fileContents; }
-
-  private char advance() { return file.charAt(current++); }
-
-  private void scanToken() {
-    char c = advance();
-    switch (c) {
-    case '(':
-      System.out.println("LEFT_PAREN ( null");
-      break;
-    case ')':
-      System.out.println("RIGHT_PAREN ) null");
-      break;
-    case '}':
-      System.out.println("RIGHT_BRACE } null");
-      break;
-    case '{':
-      System.out.println("LEFT_BRACE { null");
-      break;
-    case '*':
-      System.out.println("STAR * null");
-      break;
-    case '+':
-      System.out.println("PLUS + null");
-      break;
-    case '.':
-      System.out.println("DOT . null");
-      break;
-    case ',':
-      System.out.println("COMMA , null");
-      break;
-    case '-':
-      System.out.println("MINUS - null");
-      break;
-    case '/':
-      System.out.println("SLASH / null");
-      break;
-    case ';':
-      System.out.println("SEMICOLON ; null");
-      break;
-    default:
-      System.out.println("Not added " + c);
+    if (hadError) {
+      System.exit(65);
+    } else {
+      System.exit(0);
     }
-  }
-
-  private boolean isAtEnd() { return current >= file.length(); }
-
-  public void scanTokens() {
-    while (!isAtEnd()) {
-      scanToken();
-    }
-
-    System.out.println("EOF  null");
   }
 }
