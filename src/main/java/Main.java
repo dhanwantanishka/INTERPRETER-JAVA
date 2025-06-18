@@ -29,44 +29,49 @@ public class Main {
       System.exit(1);
     }
 
-    // Uncomment this block to pass the first stage
-    //
-    boolean hadError = false;
-    if (fileContents.length() > 0) {
-      for (char c : fileContents.toCharArray()) {
-        if (c == '(')
-          System.out.println("LEFT_PAREN ( null");
-        else if (c == ')')
-          System.out.println("RIGHT_PAREN ) null");
-        else if (c == '{')
-          System.out.println("LEFT_BRACE { null");
-        else if (c == '}')
-          System.out.println("RIGHT_BRACE } null");
-        else if (c == '*')
-          System.out.println("STAR * null");
-        else if (c == '.')
-          System.out.println("DOT . null");
-        else if (c == '-')
-          System.out.println("MINUS - null");
-        else if (c == ';')
-          System.out.println("SEMICOLON ; null");
-        else if (c == ',')
-          System.out.println("COMMA , null");
-        else if (c == '+')
-          System.out.println("PLUS + null");
-        else {
-          System.err.println("[line 1] Error: Unexpected character: " + c);
-          hadError = true;
-        }
+    int fileLen = fileContents.length();
+    int exitCode = 0;
+    int lineNum = 1;
+    for (int i = 0; i < fileLen; i++) {
+      if (fileContents.charAt(i) == '(') {
+        System.out.println("LEFT_PAREN ( null");
+      } else if (fileContents.charAt(i) == ')') {
+        System.out.println("RIGHT_PAREN ) null");
+      } else if (fileContents.charAt(i) == '{') {
+        System.out.println("LEFT_BRACE { null");
+      } else if (fileContents.charAt(i) == '}') {
+        System.out.println("RIGHT_BRACE } null");
+      } else if (fileContents.charAt(i) == '.') {
+        System.out.println("DOT . null");
+      } else if (fileContents.charAt(i) == ',') {
+        System.out.println("COMMA , null");
+      } else if (fileContents.charAt(i) == '+') {
+        System.out.println("PLUS + null");
+      } else if (fileContents.charAt(i) == '*') {
+        System.out.println("STAR * null");
+      } else if (fileContents.charAt(i) == '/') {
+        System.out.println("SLASH / null");
+      } else if (fileContents.charAt(i) == '-') {
+        System.out.println("MINUS - null");
+      } else if (fileContents.charAt(i) == ';') {
+        System.out.println("SEMICOLON ; null");
+      } else if (fileContents.charAt(i) == '\n') {
+        lineNum++;
+      } else if (i < fileLen - 1 && fileContents.charAt(i) == '=' &&
+                 fileContents.charAt(i + 1) == '=') {
+        System.out.println("EQUAL_EQUAL == null");
+        i++;
+      } else if (fileContents.charAt(i) == '=') {
+        System.out.println("EQUAL = null");
+      } else {
+        System.err.println(
+            "[line " + lineNum +
+            "] Error: Unexpected character: " + fileContents.charAt(i));
+        exitCode = 65;
       }
-      System.out.println("EOF  null");
-    } else {
-      System.out.println("EOF  null");
     }
-    if (hadError) {
-      System.exit(65);
-    } else {
-      System.exit(0);
-    }
+    System.out.println("EOF  null"); // Placeholder, remove this line when
+                                     // implementing the scanner
+    System.exit(exitCode);
   }
 }
