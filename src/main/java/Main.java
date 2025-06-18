@@ -83,7 +83,12 @@ class Scanner {
       System.out.println("MINUS - null");
       break;
     case '/':
-      System.out.println("SLASH / null");
+      if (match('/')) {
+        while (peek() != '\n' && !isAtEnd())
+          advance();
+      } else {
+        System.out.println("SLASH / null");
+      }
       break;
     case ';':
       System.out.println("SEMICOLON ; null");
@@ -128,6 +133,12 @@ class Scanner {
       hadError = true;
       break;
     }
+  }
+
+  private char peek() {
+    if (isAtEnd())
+      return '\0';
+    return file.charAt(current);
   }
 
   private boolean isAtEnd() { return current >= file.length(); }
