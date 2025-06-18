@@ -30,14 +30,12 @@ public class Main {
       System.exit(1);
     }
 
-    // Uncomment this block to pass the first stage
     // Implement the scanner
-    if (fileContents.length() > 0) {
-      Scanner scanner = new Scanner(fileContents);
-      scanner.scanTokens();
-    } else {
-      System.out.println("EOF  null"); // Placeholder, replace this line when
-                                       // implementing the scanner
+    Scanner scanner = new Scanner();
+    boolean isValid = scanner.scan(fileContents);
+    
+    if (!isValid) {
+      System.exit(65);
     }
   }
 }

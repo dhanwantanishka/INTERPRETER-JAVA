@@ -1,6 +1,6 @@
 import java.util.Map;
 
-public class Scanner {
+public class Scanner {  
   private final Map<String, String> tokens =
       Map.of("(", "LEFT_PAREN", ")", "RIGHT_PAREN", "{", "LEFT_BRACE", "}",
              "RIGHT_BRACE", "*", "STAR", ".", "DOT", ",", "COMMA", "+", "PLUS",
@@ -11,12 +11,10 @@ public class Scanner {
     int LnNBR = 1;
     int start, end;
     String val;
-    String numberPattern = "[0-9\\\\.]";
 
     if (fileContents.length() > 0) {
       for (int i = 0; i < fileContents.length(); i++) {
         char c = fileContents.charAt(i);
-        // System.err.printf("i is %d c is %c%n", i, c);
         if (tokens.containsKey(String.valueOf(c))) {
           System.out.println(tokens.get(String.valueOf(c)) + " " + c + " null");
         } else if (c == '=') {
@@ -68,51 +66,41 @@ public class Scanner {
             LnNBR = LnNBR + 1;
           }
         } else if (c == '"') {
-          //  string tokens;
+          // string tokens;
           i = i + 1;
           start = i;
           while ((i < fileContents.length()) &&
                  (fileContents.charAt(i) != '"')) {
-            // System.err.println("c is " + c);
+            if (fileContents.charAt(i) == '\n') {
+              LnNBR = LnNBR + 1;
+            }
             i = i + 1;
           }
-          System.err.println("start " + start + "] end " + i);
           if (i >= fileContents.length()) {
             System.err.println("[line " + LnNBR +
                                "] Error: Unterminated string.");
             isValidToken = false;
-
           } else {
             end = i;
-
             val = fileContents.substring(start, end);
             System.out.println("STRING " +
                                fileContents.substring(start - 1, end + 1) +
                                " " + val);
           }
-          start = 0;
-          end = 0;
-
-        } else if (String.valueOf(c).matches(numberPattern)) {
+        } else if (Character.isDigit(c)) {
           // number tokens;
           start = i;
-          while (
-              (i < fileContents.length()) &&
-              (String.valueOf(fileContents.charAt(i)).matches(numberPattern))) {
+          while ((i < fileContents.length()) &&
+                 (Character.isDigit(fileContents.charAt(i)) || 
+                  fileContents.charAt(i) == '.')) {
             i = i + 1;
-            System.err.println("c is " + fileContents.charAt(i - 1) + " i is " +
-                               i);
           }
           end = i;
           val = fileContents.substring(start, end);
-          System.err.println("val is " + val);
           double num = Double.parseDouble(val);
           System.out.println("NUMBER " + val + " " + num);
           i = i - 1;
-
-        }
-
-        else {
+        } else {
           System.err.println("[line " + LnNBR +
                              "] Error: Unexpected character: " + c);
           isValidToken = false;
