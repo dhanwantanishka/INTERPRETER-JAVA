@@ -107,6 +107,22 @@ class Scanner {
 
       System.out.println("BANG ! null");
       break;
+    case '>':
+      if (match('=')) {
+        System.out.println("GREATER_EQUAL >= null");
+        break;
+      }
+
+      System.out.println("GREATER > null");
+      break;
+    case '<':
+      if (match('=')) {
+        System.out.println("LESS_EQUAL <= null");
+        break;
+      }
+
+      System.out.println("LESS < null");
+      break;
     default:
       System.err.printf("[line %d] Error: Unexpected character: %c\n", line, c);
       hadError = true;
