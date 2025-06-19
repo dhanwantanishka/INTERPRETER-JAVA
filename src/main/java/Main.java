@@ -22,20 +22,8 @@ public class Main {
       System.exit(1);
     }
 
-    String fileContents = "";
-    try {
-      fileContents = Files.readString(Path.of(filename));
-    } catch (IOException e) {
-      System.err.println("Error reading file: " + e.getMessage());
-      System.exit(1);
-    }
-
-    // Implement the scanner
-    Scanner scanner = new Scanner();
-    boolean isValid = scanner.scan(fileContents);
-    
-    if (!isValid) {
-      System.exit(65);
-    }
+    // Use Tokenizer instead of Scanner
+    Tokenizer tokenizer = new Tokenizer();
+    tokenizer.Scanning(filename);
   }
 }
