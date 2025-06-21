@@ -1,18 +1,23 @@
-import static tool.Reporter.hasError;
-
-import expr.Expr;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
-import token.Token;
-import token.TokenHelper;
-import tool.Reporter;
 
 public class Main {
+  public static void printLogs() {
+    for (String log : GlobalStorage.getLogs()) {
+      if (log.contains("Error:"))
+        System.err.println(log);
+      else
+        System.out.println(log);
+    }
+    System.out.println("EOF  null");
+  }
 
   public static void main(String[] args) {
-    //        args = new String[]{"parse", "test.lox"};
+    // You can use print statements as follows for debugging, they'll be visible
+    // when running tests.
+    System.err.println("Logs from your program will appear here!");
+
     if (args.length < 2) {
       System.err.println("Usage: ./your_program.sh tokenize <filename>");
       System.exit(1);
@@ -26,31 +31,16 @@ public class Main {
       System.exit(1);
     }
 
-    String fileContents = "";
-    try {
-      fileContents = Files.readString(Path.of(filename));
-    } catch (IOException e) {
-      System.err.println("Error reading file: " + e.getMessage());
-      System.exit(1);
-    }
-
+    Tokenizer tokenizer = new Tokenizer();
+    tokenizer.Scanning(filename);
+    Parse parse = new Parse();
     if (command.equals("tokenize")) {
-      List<Token> tokens = TokenHelper.scan(fileContents);
-      for (Token token : tokens) {
-        Reporter.info(token);
-      }
+      printLogs();
     }
-
     if (command.equals("parse")) {
-      List<Token> tokens = TokenHelper.scan(fileContents);
-      Parser parser = new Parser(tokens);
-      List<Expr> exprs = parser.parse();
-      AstPrinter printer = new AstPrinter();
-      exprs.forEach(e -> System.out.println(printer.print(e)));
+      parse.parse();
     }
 
-    if (hasError) {
-      System.exit(65);
-    }
+    System.exit(GlobalStorage.exitCode);
   }
 }
