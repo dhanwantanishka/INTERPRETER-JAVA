@@ -16,6 +16,7 @@ public class TokenType {
         tempMap.put("var", "RESERVED");
         tempMap.put("while", "RESERVED");
         tempMap.put("EOF", "EOF");
+        tempMap.put("IDENTIFIER", "IDENTIFIER");
         category = Collections.unmodifiableMap(tempMap);
     }
 
@@ -27,6 +28,7 @@ public class TokenType {
         tempMap.put("var", "VAR");
         tempMap.put("while", "WHILE");
         tempMap.put("EOF", "EOF");
+        tempMap.put("IDENTIFIER", "IDENTIFIER");
 
         constants = Collections.unmodifiableMap(tempMap); // Make it read-only
     }
