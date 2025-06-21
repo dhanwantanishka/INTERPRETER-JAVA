@@ -2,76 +2,14 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Tokenizer {
 
-  // Map for token types
-  private static final Map<String, String> TOKEN_TYPE = new HashMap<>() {{
-    put("(", "LEFT_PAREN");
-    put(")", "RIGHT_PAREN");
-    put("{", "LEFT_BRACE");
-    put("}", "RIGHT_BRACE");
-    put(",", "COMMA");
-    put(".", "DOT");
-    put("-", "MINUS");
-    put("+", "PLUS");
-    put(";", "SEMICOLON");
-    put("*", "STAR");
-    put("/", "SLASH");
-    put("//", "COMMENT");
-    put(" ", "WHITESPACE");
-    put("\t", "WHITESPACE");
-    put("\r", "WHITESPACE");
-    put("\n", "WHITESPACE");
-    put("=", "EQUAL");
-    put("==", "EQUAL_EQUAL");
-    put("!", "BANG");
-    put("!=", "BANG_EQUAL");
-    put("<", "LESS");
-    put("<=", "LESS_EQUAL");
-    put(">", "GREATER");
-    put(">=", "GREATER_EQUAL");
-    put("\"", "STRING_LITERAL");
-  }};
-
-  // Map for token categories
-  private static final Map<String, String> TOKEN_CATEGORY = new HashMap<>() {{
-    put("//", "COMMENT");
-    put(" ", "WHITESPACE");
-    put("\t", "WHITESPACE");
-    put("\r", "WHITESPACE");
-    put("\n", "WHITESPACE");
-    put("\"", "STRING_LITERAL");
-    // For single character tokens, treat as operator
-    put("(", "OPERATOR");
-    put(")", "OPERATOR");
-    put("{", "OPERATOR");
-    put("}", "OPERATOR");
-    put(",", "OPERATOR");
-    put(".", "OPERATOR");
-    put("-", "OPERATOR");
-    put("+", "OPERATOR");
-    put(";", "OPERATOR");
-    put("*", "OPERATOR");
-    put("/", "OPERATOR");
-    put("=", "OPERATOR");
-    put("==", "OPERATOR");
-    put("!", "OPERATOR");
-    put("!=", "OPERATOR");
-    put("<", "OPERATOR");
-    put("<=", "OPERATOR");
-    put(">", "OPERATOR");
-    put(">=", "OPERATOR");
-  }};
-
   public String tokenCheck(String token) {
-    if (TOKEN_TYPE.containsKey(token)) {
-      String category = TOKEN_CATEGORY.getOrDefault(token, "OPERATOR");
-      if (category.equals("COMMENT")) {
+    if (TokenType.containsKey(token)) {
+      if (TokenType.getCategory(token).equals("COMMENT")) {
         return "SKIP_LINE";
-      } else if (category.equals("WHITESPACE")) {
+      } else if (TokenType.getCategory(token).equals("WHITESPACE")) {
         return "CONTINUE";
       } else {
         return "OPERATOR";
@@ -82,26 +20,26 @@ public class Tokenizer {
   }
 
   public String parseString(String line, int i) {
-    StringBuilder str = new StringBuilder();
+    String str = "";
     while (i < line.length() && line.charAt(i) != '"') {
-      str.append(line.charAt(i));
+      str += line.charAt(i);
       i++;
     }
-    return str.toString();
+    return str;
   }
 
   public String parseNumber(String line, int i) {
-    StringBuilder num = new StringBuilder();
+    String num = "";
     int dot = 0;
     while (i < line.length() && (Character.isDigit(line.charAt(i)) ||
-                                 (line.charAt(i) == '.' && dot == 0))) {
+                                 line.charAt(i) == '.' && dot == 0)) {
       if (line.charAt(i) == '.') {
         dot++;
       }
-      num.append(line.charAt(i));
+      num += line.charAt(i);
       i++;
     }
-    return num.toString();
+    return num;
   }
 
   public void Scanning(String filePath) {
@@ -110,41 +48,46 @@ public class Tokenizer {
       String line;
       int lineNumber = 1;
       while ((line = br.readLine()) != null) {
+
         for (int i = 0; i < line.length(); i++) {
-          // Check for two-character tokens first
-          if (i < line.length() - 1 && TOKEN_TYPE.containsKey(line.substring(i, i + 2))) {
-            String twoChar = line.substring(i, i + 2);
-            String category = TOKEN_CATEGORY.getOrDefault(twoChar, "OPERATOR");
-            if (category.equals("COMMENT")) {
+          if (i < line.length() - 1 &&
+              TokenType.containsKey(line.substring(i, i + 2))) {
+            if (TokenType.getCategory(line.substring(i, i + 2))
+                    .equals("COMMENT")) {
               break;
             }
-            System.out.println(TOKEN_TYPE.get(twoChar) + " " + twoChar + " null");
+            System.out.println(TokenType.get(line.substring(i, i + 2)) + " " +
+                               line.substring(i, i + 2) + " null");
             i++;
           }
-          // Single character tokens
-          else if (TOKEN_TYPE.containsKey(line.substring(i, i + 1))) {
-            String oneChar = line.substring(i, i + 1);
-            String category = TOKEN_CATEGORY.getOrDefault(oneChar, "OPERATOR");
-            if (category.equals("WHITESPACE")) {
+
+          else if (TokenType.containsKey(line.substring(i, i + 1))) {
+            if (TokenType.getCategory(line.substring(i, i + 1))
+                    .equals("WHITESPACE")) {
               continue;
             }
-            if (category.equals("STRING_LITERAL")) {
+            if (TokenType.getCategory(line.substring(i, i + 1))
+                    .equals("STRING_LITERAL")) {
               String str = parseString(line, ++i);
               i += str.length();
-              if (i == line.length() || (i < line.length() && line.charAt(i) != '"')) {
-                System.err.println("[line " + lineNumber + "] Error: Unterminated string.");
+              if (i == line.length() ||
+                  (i < line.length() && line.charAt(i) != '"')) {
+                System.err.println("[line " + lineNumber +
+                                   "] Error: Unterminated string.");
                 exitCode = 65;
                 continue;
               }
               System.out.println("STRING \"" + str + "\" " + str);
               continue;
             }
-            // Number literal
-            if (Character.isDigit(oneChar.charAt(0))) {
+            if (TokenType.getCategory(line.substring(i, i + 1))
+                    .equals("NUMBER")) {
               String num = parseNumber(line, i);
               i += num.length() - 1;
+
               BigDecimal bd = new BigDecimal(num);
               String cleaned = bd.stripTrailingZeros().toPlainString();
+
               if (cleaned.split("\\.").length == 1) {
                 System.out.println("NUMBER " + num + " " + cleaned + ".0");
               } else {
@@ -152,31 +95,25 @@ public class Tokenizer {
               }
               continue;
             }
-            System.out.println(TOKEN_TYPE.get(oneChar) + " " + oneChar + " null");
-          }
-          // Identifier
-          else if (Character.isAlphabetic(line.charAt(i)) || line.charAt(i) == '_') {
-            StringBuilder identifier = new StringBuilder();
+            System.out.println(TokenType.get(line.substring(i, i + 1)) + " " +
+                               line.substring(i, i + 1) + " null");
+          } else if (Character.isAlphabetic(line.charAt(i)) ||
+                     line.charAt(i) == '_') {
+            String identifier = "";
             while (i < line.length() &&
                    !(line.charAt(i) == ' ' || line.charAt(i) == '(' ||
                      line.charAt(i) == ')' || line.charAt(i) == ',' ||
                      line.charAt(i) == '{' || line.charAt(i) == '}' ||
                      line.charAt(i) == ';')) {
-              identifier.append(line.charAt(i));
+              identifier += line.charAt(i);
               i++;
             }
             i--;
-            System.out.println("IDENTIFIER " + identifier + " null");
-          } else if (Character.isDigit(line.charAt(i))) {
-            // Number literal not caught above
-            String num = parseNumber(line, i);
-            i += num.length() - 1;
-            BigDecimal bd = new BigDecimal(num);
-            String cleaned = bd.stripTrailingZeros().toPlainString();
-            if (cleaned.split("\\.").length == 1) {
-              System.out.println("NUMBER " + num + " " + cleaned + ".0");
+            if (TokenType.containsKey(identifier)) {
+              System.out.println(TokenType.get(identifier) + " " + identifier +
+                                 " null");
             } else {
-              System.out.println("NUMBER " + num + " " + cleaned);
+              System.out.println("IDENTIFIER " + identifier + " null");
             }
           } else {
             System.err.println(
