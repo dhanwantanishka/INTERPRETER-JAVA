@@ -3,12 +3,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class Main {
-  public static void printLogs() {
-    for (String log : GlobalStorage.getLogs()) {
-      if (log.contains("Error:"))
-        System.err.println(log);
-      else
-        System.out.println(log);
+  public static void printTokens() {
+    for (Token token : GlobalStorage.getTokens()) {
+        System.out.println(token.toString());
     }
   }
 
@@ -32,8 +29,7 @@ public class Main {
     tokenizer.Scanning(filename);
     
     if (command.equals("tokenize")) {
-      printLogs();
-      System.out.println("EOF  null");
+      printTokens();
     }
     if (command.equals("parse")) {
       Parse parse = new Parse();

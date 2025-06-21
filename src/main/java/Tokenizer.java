@@ -24,7 +24,7 @@ public class Tokenizer {
             scanToken();
         }
 
-        GlobalStorage.addLog(new Token("EOF", "", null, line).toString());
+        GlobalStorage.addToken(new Token("EOF", "", null, line));
     }
 
     private void scanToken() {
@@ -148,6 +148,6 @@ public class Tokenizer {
 
     private void addToken(String type, Object literal) {
         String text = source.substring(start, current);
-        GlobalStorage.addLog(new Token(type, text, literal, line).toString());
+        GlobalStorage.addToken(new Token(type, text, literal, line));
     }
 } 
