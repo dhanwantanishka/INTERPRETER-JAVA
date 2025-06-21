@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.List;
-import Token;
 
 public class GlobalStorage {
   private static final List<String> logs = new ArrayList<>();
