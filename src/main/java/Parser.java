@@ -28,7 +28,8 @@ public class Parser {
     while (!isEnd()) {
 
       if (match(TokenConstant.literalTokens)) {
-        Token literal = previous();
+        Token literal = cur();
+        forward();
         Object value = switch (literal.type) {
           case "STRING" -> literal.literal;
           case "NUMBER" -> literal.literal;
@@ -48,7 +49,6 @@ public class Parser {
   private boolean match(Collection<String> tokenTypes) {
     for (String tokenType : tokenTypes) {
       if (tokenType.equals(cur().type)) {
-        forward();
         return true;
       }
     }
