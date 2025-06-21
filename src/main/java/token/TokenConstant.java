@@ -3,5 +3,5 @@ package token;
 import java.util.Set;
 
 public class TokenConstant {
-    public static final Set<String> literalTokens = Set.of("STRING", "NUMBER");
+    public static final Set<String> literalTokens = Set.of("STRING", "NUMBER", "TRUE", "FALSE", "NIL");
 } 

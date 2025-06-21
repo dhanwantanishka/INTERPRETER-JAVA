@@ -28,9 +28,16 @@ public class Parser {
     while (!isEnd()) {
 
       if (match(TokenConstant.literalTokens)) {
-        Token literal = cur();
-        exprs.add(new Literal(literal.lexeme));
-        forward();
+        Token literal = previous();
+        Object value = switch (literal.type) {
+          case "STRING" -> literal.literal;
+          case "NUMBER" -> literal.literal;
+          case "TRUE" -> true;
+          case "FALSE" -> false;
+          case "NIL" -> null;
+          default -> null; // Should not be reached
+        };
+        exprs.add(new Literal(value));
       }
     }
     return exprs;
@@ -39,6 +46,7 @@ public class Parser {
   private boolean match(Collection<String> tokenTypes) {
     for (String tokenType : tokenTypes) {
       if (tokenType.equals(cur().type)) {
+        forward();
         return true;
       }
     }
