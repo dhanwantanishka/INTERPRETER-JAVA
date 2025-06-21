@@ -9,7 +9,6 @@ public class Literal extends Expr {
 
     @Override
     public <R> R accept(Visitor<R> visitor) {
-        // This is a placeholder for the visitor pattern.
-        return null;
+        return visitor.visitLiteralExpr(this);
     }
 } 

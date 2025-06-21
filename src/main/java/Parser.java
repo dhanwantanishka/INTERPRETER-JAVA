@@ -38,6 +38,8 @@ public class Parser {
           default -> null; // Should not be reached
         };
         exprs.add(new Literal(value));
+      } else {
+        forward();
       }
     }
     return exprs;

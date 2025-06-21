@@ -46,7 +46,7 @@ public class Main {
       Parser parser = new Parser(tokens);
       List<Expr> exprs = parser.parse();
       AstPrinter printer = new AstPrinter();
-      exprs.forEach(e -> System.out.println(e.accept(printer)));
+      exprs.forEach(e -> System.out.println(printer.print(e)));
     }
 
     if (hasError) {
