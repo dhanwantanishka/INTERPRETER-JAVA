@@ -10,12 +10,9 @@ public class Main {
       else
         System.out.println(log);
     }
-    System.out.println("EOF  null");
   }
 
   public static void main(String[] args) {
-    // You can use print statements as follows for debugging, they'll be visible
-    // when running tests.
     System.err.println("Logs from your program will appear here!");
 
     if (args.length < 2) {
@@ -33,11 +30,13 @@ public class Main {
 
     Tokenizer tokenizer = new Tokenizer();
     tokenizer.Scanning(filename);
-    Parse parse = new Parse();
+    
     if (command.equals("tokenize")) {
       printLogs();
+      System.out.println("EOF  null");
     }
     if (command.equals("parse")) {
+      Parse parse = new Parse();
       parse.parse();
     }
 

@@ -8,9 +8,22 @@ public class TokenType {
 
     static {
         Map<String, String> keywordsMap = new HashMap<>();
-        keywordsMap.put("true", "TRUE");
+        keywordsMap.put("and", "AND");
+        keywordsMap.put("class", "CLASS");
+        keywordsMap.put("else", "ELSE");
         keywordsMap.put("false", "FALSE");
+        keywordsMap.put("for", "FOR");
+        keywordsMap.put("fun", "FUN");
+        keywordsMap.put("if", "IF");
         keywordsMap.put("nil", "NIL");
+        keywordsMap.put("or", "OR");
+        keywordsMap.put("print", "PRINT");
+        keywordsMap.put("return", "RETURN");
+        keywordsMap.put("super", "SUPER");
+        keywordsMap.put("this", "THIS");
+        keywordsMap.put("true", "TRUE");
+        keywordsMap.put("var", "VAR");
+        keywordsMap.put("while", "WHILE");
         KEYWORDS = Collections.unmodifiableMap(keywordsMap);
 
         Map<String, String> singleCharMap = new HashMap<>();
